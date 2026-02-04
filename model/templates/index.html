@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tes Sistem Klasifikasi</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        textarea { width: 100%; height: 100px; margin-bottom: 10px; }
+        button { padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        #hasil { margin-top: 20px; padding: 15px; border: 1px solid #ddd; display: none; }
+    </style>
+</head>
+<body>
+    <h2>Uji Coba Model Klasifikasi</h2>
+    <p>Masukkan contoh keluhan mahasiswa di bawah ini:</p>
+    
+    <textarea id="inputMasalah" placeholder="Contoh: Saya bingung mau ambil karir apa..."></textarea>
+    <br>
+    <button onclick="kirimPrediksi()">Cek Kategori Masalah</button>
+
+    <div id="hasil">
+        <h3>Hasil Prediksi AI:</h3>
+        <p id="teksKategori" style="font-weight: bold; font-size: 1.2em; color: #007bff;"></p>
+        <small id="infoStatus"></small>
+    </div>
+
+    <script>
+        function kirimPrediksi() {
+            var masalah = document.getElementById('inputMasalah').value;
+            
+            // Kirim data ke Flask (Backend)
+            fetch('/predict', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ masalah: masalah })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Tampilkan balasan dari Flask
+                document.getElementById('hasil').style.display = 'block';
+                document.getElementById('teksKategori').innerText = data.kategori;
+                document.getElementById('infoStatus').innerText = "Status: " + data.pesan;
+            })
+            .catch(error => {
+                alert("Terjadi Error: " + error);
+            });
+        }
+    </script>
+</body>
+</html>

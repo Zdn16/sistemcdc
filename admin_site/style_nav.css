@@ -1,0 +1,26 @@
+#sidebar {
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  left: -250px;
+  top: 0;
+  background: #212529;
+  transition: 0.3s;
+  padding: 1rem;
+  z-index: 1000;
+  
+}
+
+#sidebar.active {
+  left: 0;
+}
+
+#content {
+  transition: margin-left 0.3s;
+  padding: 1rem;
+}
+
+#content.shift {
+  margin-left: 250px;
+}
+

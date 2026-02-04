@@ -1,0 +1,37 @@
+@media print {
+    .no-print {
+        display: none !important;
+    }
+}
+
+.card-profile {
+    border-top: 4px solid #0d6efd;
+}
+
+.text-jawaban {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 5px solid #e9ecef;
+}
+
+.label-tanya {
+    font-weight: bold;
+    color: #495057;
+    margin-top: 15px;
+}
+
+.score-box {
+    text-align: center;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.score-val {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #0d6efd;
+}
+
