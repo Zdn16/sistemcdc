@@ -2,7 +2,6 @@
 include "koneksi.php";
 include "navbar.php";
 
-// Cek apakah ada ID di URL
 if (!isset($_GET['id'])) {
     header("Location: coi.php");
     exit;

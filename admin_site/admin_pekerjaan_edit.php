@@ -1,6 +1,7 @@
 <?php
 session_start(); // Tambahkan session start jika perlu cek login
 include "koneksi.php";
+include "navbar.php";
 
 $id = $_GET['id'] ?? null;
 if (!$id) {
