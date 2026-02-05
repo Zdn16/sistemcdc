@@ -3,9 +3,8 @@
     include "navbar.php";
 
     // ==========================================
-    // 1. AMBIL DATA JURUSAN GABUNG FAKULTAS
-    // ==========================================
-    // Kita join tabel jurusan & fakultas agar nama fakultasnya juga terlihat di pilihan
+    // AMBIL DATA JURUSAN GABUNG FAKULTAS
+    // join tabel jurusan & fakultas agar nama fakultasnya juga terlihat di pilihan
     $query_jurusan = "SELECT j.id_jurusan, j.nama_jurusan, f.nama_fakultas 
                       FROM jurusan j 
                       JOIN fakultas f ON j.id_fakultas = f.id_fakultas 
@@ -61,10 +60,8 @@
                             <select name="id_jurusan" class="form-control" required>
                                 <option value="">-- Pilih Departemen --</option>
                                 <?php 
-                                // Pastikan ini mengambil id_jurusan
                                 $sql_jur = mysqli_query($koneksi, "SELECT * FROM jurusan");
                                 while($j = mysqli_fetch_array($sql_jur)) {
-                                    // Value harus ID (angka), Tampilan adalah Nama (teks)
                                     echo "<option value='".$j['id_jurusan']."'>".$j['nama_jurusan']."</option>";
                                 }
                                 ?>

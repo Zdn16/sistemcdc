@@ -2,37 +2,30 @@
 session_start();
 include "koneksi.php";
 
-// ===========================
-// 1. AMBIL DATA DARI FORM
-// ===========================
+// Mengambil data dari form
 $id_user      = isset($_POST['id_user']) ? (int)$_POST['id_user'] : 0;
 $id_asesmen       = isset($_POST['id_asesmen']) ? (int)$_POST['id_asesmen'] : 0;
 $jadwal_input     = $_POST['jadwal_konseling'] ?? null;
 $lokasi = $_POST['lokasi'] ?? null;
 
-// ===========================
-// 2. VALIDASI DATA KOSONG
-// ===========================
+// VALIDASI DATA KOSONG
 if ($id_user <= 0 || $id_asesmen <= 0 || !$jadwal_input || !$lokasi) {
     echo "<script>alert('Data tidak lengkap!'); window.history.back();</script>";
     exit;
 }
 
-// ===========================
-// 3. NORMALISASI FORMAT datetime-local -> MySQL DATETIME
-//    "YYYY-MM-DDTHH:MM" -> "YYYY-MM-DD HH:MM:00"
-// ===========================
+// NORMALISASI FORMAT datetime
 $jadwal_konseling = str_replace('T', ' ', $jadwal_input);
 if (strlen($jadwal_konseling) === 16) {
     $jadwal_konseling .= ":00";
 }
 
-// ===========================
-// 4. AMBIL DATA TERAKHIR UNTUK LOGIKA SESI LANJUTAN
+
+// AMBIL DATA TERAKHIR UNTUK LOGIKA SESI LANJUTAN
 //    - jika belum ada -> sesi 1
 //    - jika ada -> hanya boleh tambah sesi jika status terakhir = Lanjutan
 //    - konselor harus SAMA dengan sesi sebelumnya (kalau lanjutan)
-// ===========================
+
 $sesi_final   = 1;
 $status_final = 'Disetujui';
 $catatan_final = '';
@@ -62,14 +55,14 @@ if ($q_last && mysqli_num_rows($q_last) > 0) {
     // lanjutan -> sesi naik otomatis
     $sesi_final = $sesi_last + 1;
 
-    // paksa konselor sama
+    // konselor harus sama
     if ($konselor_last > 0) {
         $id_user = $konselor_last;
     }
 }
 
 // ===========================
-// 5. CEK JADWAL BENTROK (konselor sama & waktu sama)
+// CEK JADWAL BENTROK (konselor sama & waktu sama)
 // ===========================
 $query_cek = "SELECT id_konseling FROM konseling 
               WHERE id_user = ? 
@@ -95,9 +88,9 @@ if (mysqli_stmt_num_rows($stmt_cek) > 0) {
 }
 mysqli_stmt_close($stmt_cek);
 
-// ===========================
-// 6. INSERT SESI BARU
-// ===========================
+
+// INSERT SESI BARU
+
 $query = "INSERT INTO konseling 
             (id_user, id_asesmen, jadwal_konseling, lokasi, status, sesi, catatan)
           VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -121,9 +114,8 @@ mysqli_stmt_bind_param(
 
 $execute = mysqli_stmt_execute($stmt);
 
-// ===========================
-// 7. HASIL & REDIRECT
-// ===========================
+
+// HASIL & REDIRECT
 if ($execute) {
     mysqli_stmt_close($stmt);
     echo "<script>

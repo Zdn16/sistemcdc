@@ -4,7 +4,7 @@ include "koneksi.php";
 $nama   = $_POST['nama_user'];
 $jk     = $_POST['jk_user'];
 $email  = $_POST['email_user'];
-$pass   = $_POST['pass_user']; // PASSWORD ASLI
+$pass   = $_POST['pass_user']; 
 $role   = $_POST['role'];
 
 // Cek email duplicate

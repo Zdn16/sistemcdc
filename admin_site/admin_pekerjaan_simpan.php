@@ -3,7 +3,7 @@ session_start();
 include "koneksi.php";
 
 // ===========================
-// 1. AMBIL DATA DARI FORM
+// AMBIL DATA DARI FORM
 // ===========================
 $id_pekerjaan   = $_POST['id_pekerjaan'] ?? null;
 $nama_pekerjaan = $_POST['nama_pekerjaan'] ?? null;
@@ -20,12 +20,12 @@ $pk_lifestyle   = $_POST['pk_lifestyle'] ?? null;
 
 
 // ===========================
-// 2. VALIDASI DATA
+// VALIDASI DATA
 // ===========================
 if (
     !$nama_pekerjaan || 
     !$ket_pekerjaan ||
-    !$id_jurusan ||  // PERBAIKAN 2: Validasi id_jurusan
+    !$id_jurusan ||  
     !$pk_autonomy || !$pk_security || !$pk_tf ||
     !$pk_gm || !$pk_ec || !$pk_service || !$pk_challenge || !$pk_lifestyle
 ) {
@@ -34,14 +34,11 @@ if (
 }
 
 // ===========================
-// 2.5 CEK DUPLIKASI DATA
-// ===========================
-// PERBAIKAN 3: Query menggunakan id_jurusan
+// CEK DUPLIKASI DATA
 $check_query = "SELECT id_pekerjaan FROM profil_pekerjaan WHERE nama_pekerjaan = ? AND id_jurusan = ?";
 $stmt_check = mysqli_prepare($koneksi, $check_query);
 
 if ($stmt_check) {
-    // PERBAIKAN 4: Bind param "si" (String nama, Integer id_jurusan)
     mysqli_stmt_bind_param($stmt_check, "si", $nama_pekerjaan, $id_jurusan);
     mysqli_stmt_execute($stmt_check);
     mysqli_stmt_store_result($stmt_check);
@@ -59,11 +56,7 @@ if ($stmt_check) {
     die("Query Cek Gagal: " . mysqli_error($koneksi));
 }
 
-
-// ===========================
-// 3. SIMPAN KE TABEL
-// ===========================
-// PERBAIKAN 5: Query Insert menggunakan id_jurusan
+// Menyimpan ke tabel
 $query = "INSERT INTO profil_pekerjaan 
             (nama_pekerjaan, ket_pekerjaan, id_jurusan, pk_autonomy,
             pk_security, pk_tf, pk_gm, pk_ec, pk_service, pk_challenge, pk_lifestyle)
@@ -75,16 +68,13 @@ if (!$stmt) {
     die("Query Insert gagal: " . mysqli_error($koneksi));
 }
 
-// PERBAIKAN 6: Bind param "siiiiiiiii"
-// (s = string untuk nama_pekerjaan)
-// (i = integer pertama untuk id_jurusan)
-// (8 i berikutnya untuk nilai skor)
+
 mysqli_stmt_bind_param(
     $stmt,
     "ssiiiiiiiii", 
     $nama_pekerjaan,
     $ket_pekerjaan,
-    $id_jurusan, // <-- Masuk sebagai integer
+    $id_jurusan, 
     $pk_autonomy,
     $pk_security,
     $pk_tf,
@@ -97,9 +87,6 @@ mysqli_stmt_bind_param(
 
 $execute = mysqli_stmt_execute($stmt);
 
-// ===========================
-// 4. HASIL & REDIRECT
-// ===========================
 if($execute){
     mysqli_stmt_close($stmt);
     echo "<script>

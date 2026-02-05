@@ -139,10 +139,10 @@ if(mysqli_num_rows($result) > 0){
         $isSelesai  = ($status === 'Selesai');
         $isLanjutan = ($status === 'Lanjutan');
 
-        // Tentukan Link: Hanya bisa diklik jika status 'Disetujui'
+        // Hanya bisa diklik jika status 'Disetujui'
         $linkInput  = $isAktif ? "konselor_update.php?id_asesmen={$row['id_asesmen']}" : '#';
 
-        // Logika Teks dan Warna Tombol (Class)
+        // Logika Teks dan Warna Tombol
         if ($isSelesai) {
             // Jika Selesai: Teks 'Selesai', Warna Hijau (btn-success), Disabled
             $textInput  = 'Selesai';

@@ -422,7 +422,15 @@ while ($row = mysqli_fetch_assoc($resLatest)) {
                 backgroundColor: colors,
             }],
         },
-        options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+        options: { 
+            maintainAspectRatio: false, 
+            plugins: {               
+                legend: {            
+                    display: false   
+                }                    
+            },                       
+            scales: { y: { beginAtZero: true } } 
+        }
     });
 
     // CHART COI / MINAT (Bar)
@@ -436,7 +444,15 @@ while ($row = mysqli_fetch_assoc($resLatest)) {
                 backgroundColor: '#f6c23e',
             }],
         },
-        options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+        options: { 
+            maintainAspectRatio: false, 
+            plugins: {              
+                legend: {           
+                    display: false  
+                }                   
+            },                      
+            scales: { y: { beginAtZero: true } } 
+        }
     });
 
     // CHART JURUSAN (Bar Full Width)
@@ -451,7 +467,12 @@ while ($row = mysqli_fetch_assoc($resLatest)) {
             }],
         },
         options: { 
-            maintainAspectRatio: false, 
+            maintainAspectRatio: false,
+            plugins: {              
+                   legend: {           
+                    display: false  
+                }                   
+            },     
             scales: { 
                 y: { beginAtZero: true },
                 x: { ticks: { autoSkip: false, maxRotation: 45, minRotation: 45 } }
@@ -459,7 +480,7 @@ while ($row = mysqli_fetch_assoc($resLatest)) {
         }
     });
 
-    // CHART ANGKATAN (Line)
+  // CHART ANGKATAN (Line)
     new Chart(document.getElementById('chartAngkatan'), {
         type: 'line',
         data: {
@@ -477,7 +498,20 @@ while ($row = mysqli_fetch_assoc($resLatest)) {
                 fill: true
             }],
         },
-        options: { maintainAspectRatio: false, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+        options: { 
+            maintainAspectRatio: false, 
+            plugins: {              
+                legend: {           
+                    display: false  
+                }                   
+            },                      
+            scales: { 
+                y: { 
+                    beginAtZero: true, 
+                    ticks: { stepSize: 1 } 
+                } 
+            } 
+        }
     });
 
     // CHART JENIS KELAMIN (Pie)
@@ -508,6 +542,12 @@ while ($row = mysqli_fetch_assoc($resLatest)) {
         options: { 
             indexAxis: 'y', // Bar Horizontal
             maintainAspectRatio: false,
+            maintainAspectRatio: false, 
+            plugins: {              
+                legend: {           
+                    display: false  
+                }                   
+            },      
         }
     });
 

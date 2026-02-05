@@ -3,7 +3,7 @@ include "koneksi_ajax.php";
 
 header('Content-Type: application/json; charset=utf-8');
 
-// biar warning tidak merusak JSON (untuk debug boleh matiin dulu)
+// biar warning tidak merusak JSON 
 error_reporting(0);
 
 $id_fakultas = isset($_GET['id_fakultas']) ? (int)$_GET['id_fakultas'] : 0;

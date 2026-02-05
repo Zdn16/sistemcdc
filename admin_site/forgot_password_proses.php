@@ -43,7 +43,7 @@ $up = $koneksi->prepare("UPDATE user SET reset_token_hash=?, reset_token_expire=
 $up->bind_param("ssi", $tokenHash, $expire, $user['id_user']);
 $up->execute();
 
-// Buat link reset (sesuaikan domain/path project kamu)
+// Buat link reset 
 $baseUrl = "http://localhost/sistemcdc"; 
 $resetLink = $baseUrl . "/admin_site/resetpassword.php?token=" . urlencode($token) . "&email=" . urlencode($user['email_user']);
 
@@ -86,7 +86,7 @@ try {
   exit;
 }
  {
-  // Kalau email gagal terkirim, sebaiknya token dibatalkan
+  // Jika email gagal, token dibatalkan
   $clr = $koneksi->prepare("UPDATE user SET reset_token_hash=NULL, reset_token_expire=NULL WHERE id_user=?");
   $clr->bind_param("i", $user['id_user']);
   $clr->execute();

@@ -20,7 +20,7 @@ if ($id_asesmen > 0) {
         $data = mysqli_fetch_assoc($query);
         $nim = $data['nim'];
 
-        // Ambil sesi terakhir untuk asesmen ini
+        // Ambil sesi terakhir untuk asesmen 
         $q_last = mysqli_query($koneksi, "
             SELECT id_konseling, id_user, status, sesi
             FROM konseling
@@ -48,12 +48,12 @@ if ($id_asesmen > 0) {
                 $boleh_input = false;
                 $pesan_disable = "Konseling untuk mahasiswa dengan NIM <strong>$nim</strong> sudah berstatus <strong>Selesai</strong>. Tidak dapat membuat jadwal baru.";
             } else {
-                // status lain dianggap tidak boleh (aman)
+                // status lain dianggap tidak boleh 
                 $boleh_input = false;
                 $pesan_disable = "Tidak dapat membuat jadwal baru karena status terakhir tidak valid.";
             }
         } else {
-            // Belum pernah ada konseling -> boleh input sesi 1
+            // Belum pernah ada konseling -> input sesi 1
             $boleh_input = true;
             $sesi_otomatis = 1;
         }
@@ -114,7 +114,6 @@ if ($id_asesmen > 0) {
                                     ?>
 
                                     <?php if ($isLanjutan): ?>
-                                        <!-- Penting: select disabled tidak terkirim, jadi kirim via hidden -->
                                         <input type="hidden" name="id_user" value="<?= (int)$default_konselor ?>">
 
                                         <select class="form-select" disabled>

@@ -185,7 +185,6 @@ function buildQuery($overrides = []) {
           <table class="table table-hover align-middle">
             <thead class="table-light">
               <tr>
-                <th style="width:80px;">ID</th>
                 <th style="width:220px;">Cluster</th>
                 <th>Permasalahan</th>
                 <th style="width:160px;">Tanggal</th>
@@ -194,7 +193,6 @@ function buildQuery($overrides = []) {
             <tbody>
               <?php foreach($data as $row): ?>
                 <tr>
-                  <td><?= (int)$row['id_asesmen'] ?></td>
                   <td>
                     <span class="badge bg-primary"><?= htmlspecialchars($row['cluster']) ?></span>
                   </td>
@@ -221,7 +219,7 @@ function buildQuery($overrides = []) {
               </li>
 
               <?php
-              // tampilkan range halaman yang "rapi"
+              // tampilkan range halaman 
               $start = max(1, $page - 2);
               $end   = min($totalPages, $page + 2);
               for($p=$start; $p<=$end; $p++):

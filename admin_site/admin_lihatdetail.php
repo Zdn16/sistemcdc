@@ -2,7 +2,7 @@
 session_start();
 include "koneksi.php";
 
-// 1. Ambil ID dari URL
+// Ambil ID dari URL
 $id_asesmen = $_GET['id_asesmen'] ?? null;
 
 if (!$id_asesmen) {
@@ -10,10 +10,9 @@ if (!$id_asesmen) {
     exit;
 }
 
-// 2. Query Data Lengkap Mahasiswa & Asesmen
+// Query Data Lengkap Mahasiswa & Asesmen
 $id_asesmen = (int)$id_asesmen;
 
-// PERBAIKAN: Menggunakan LEFT JOIN agar data tetap muncul walau Jurusan/Mhs tidak lengkap
 $query = "SELECT a.*,
                  m.nama AS nama_mhs,
                  m.nim,
@@ -40,7 +39,7 @@ if (!$data) {
     exit;
 }
 
-// 3. Ambil Data Rekomendasi Karier (Gunakan LEFT JOIN juga untuk keamanan)
+// Ambil Data Rekomendasi Karier 
 $query_rek = "SELECT hr.*, pp.nama_pekerjaan 
               FROM hasil_rekomendasi hr
               LEFT JOIN profil_pekerjaan pp ON hr.id_pekerjaan = pp.id_pekerjaan
@@ -53,8 +52,7 @@ while($row_rek = mysqli_fetch_assoc($res_rek)) {
     $rekomendasi[] = $row_rek;
 }
 
-// 4. Cek Status Jadwal & Catatan
-// Pakai null coalescing (??) untuk jaga-jaga jika NIM tidak ketemu
+// Cek Status Jadwal & Catatan
 $id_asmn = (int)($data['id_asesmen'] ?? 0);
 
 $q_konseling = mysqli_query(
@@ -226,7 +224,7 @@ if ($q_konseling) {
                                 <?= nl2br(htmlspecialchars($data['permasalahan'] ?? '-')) ?>
                             </div>
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Kategori Permasalahan (AI Prediction)
+                                    Kategori Permasalahan
                                     <span class="badge bg-info text-dark"><?= $data['kategori_permasalahan'] ?? '-' ?></span>
                                 </li>
                             </ul>

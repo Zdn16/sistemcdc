@@ -6,7 +6,7 @@ if (!isset($_SESSION['nim'])) {
     die("Session NIM tidak ditemukan, silakan login ulang");
 }
 
-/* QUERY PERTANYAAN */
+// QUERY PERTANYAAN  
 $query = mysqli_query($koneksi, "SELECT * FROM item_pertanyaan ORDER BY id_item");
 
 if (!$query) {

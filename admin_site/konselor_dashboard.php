@@ -7,7 +7,7 @@ if (session_status() == PHP_SESSION_NONE) {
 include "koneksi.php";
 include "konselor_navbar.php";
 
-// 1. CEK LOGIN & AMBIL ID SESSION
+// CEK LOGIN & AMBIL ID SESSION
 if (!isset($_SESSION['id_user'])) {
     echo "<script>alert('Silakan login terlebih dahulu'); window.location='login.php';</script>";
     exit;
@@ -16,7 +16,7 @@ if (!isset($_SESSION['id_user'])) {
 $id_konselor_login = $_SESSION['id_user']; // ID Konselor yang sedang login
 
 // ==========================================
-// 2. LOGIKA FILTER WAKTU
+// LOGIKA FILTER WAKTU
 // ==========================================
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'semua';
 $whereWaktu = ""; // Kita pakai satu variabel where saja biar rapi
@@ -41,10 +41,10 @@ switch ($filter) {
 }
 
 // ==========================================
-// 3. QUERY DATA (KHUSUS KONSELOR LOGIN)
+// QUERY DATA (KHUSUS KONSELOR LOGIN)
 // ==========================================
 
-// B. Konseling Terjadwal (Status Disetujui & Milik Konselor Ini)
+// Konseling Terjadwal (Status Disetujui & Milik Konselor Ini)
 $q2 = "SELECT COUNT(*) AS total FROM konseling 
        WHERE status='Disetujui' 
        AND id_user= '$id_konselor_login' 

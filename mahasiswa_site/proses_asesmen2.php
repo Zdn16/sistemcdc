@@ -10,7 +10,7 @@ if ($permasalahan === '') {
     exit;
 }
 
-// Hitung jumlah kata (aman untuk spasi/newline berlebih)
+// Hitung jumlah kata
 $kata = preg_split('/\s+/', $permasalahan, -1, PREG_SPLIT_NO_EMPTY);
 $jumlah_kata = count($kata);
 

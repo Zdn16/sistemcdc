@@ -10,9 +10,6 @@ $keyword = isset($_GET['keyword'])
 
 $filter = $_GET['filter'] ?? "";
 
-// =======================
-// QUERY DASAR
-// =======================
 $query = "SELECT * FROM item_pertanyaan WHERE 1=1";
 
 // =======================

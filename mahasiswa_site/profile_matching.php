@@ -48,7 +48,7 @@ function hitungSPKProfileMatching($koneksi, $id_jurusan, $skor_mahasiswa) {
 
     while ($p = mysqli_fetch_assoc($query)) {
         
-        // Tentukan Core Factor (CF) & Secondary Factor (SF) ---
+        // Tentukan Core Factor (CF) & Secondary Factor (SF) 
         $temp_standar = [];
         foreach ($factorMap as $key => $colDb) {
             $temp_standar[$key] = $p[$colDb];
@@ -59,7 +59,7 @@ function hitungSPKProfileMatching($koneksi, $id_jurusan, $skor_mahasiswa) {
         $cf = []; 
         $sf = [];
 
-        // Perhitungan Gap & Bobot ---
+        // Perhitungan Gap & Bobot
         foreach ($factorMap as $keySkor => $colDb) {
             
             $rawUser    = isset($skor_mahasiswa[$keySkor]) ? $skor_mahasiswa[$keySkor] : 0;

@@ -8,7 +8,7 @@ if (!$id) {
     die("ID tidak valid");
 }
 
-// 1. Tangkap Data
+// Tangkap Data
 $nama_pekerjaan = $_POST['nama_pekerjaan'];
 $id_jurusan     = $_POST['id_jurusan']; // Ganti dari jurusan_pekerjaan ke id_jurusan
 $ket_pekerjaan  = $_POST['ket_pekerjaan'];
@@ -21,12 +21,12 @@ $pk_service     = $_POST['pk_service'];
 $pk_challenge   = $_POST['pk_challenge'];
 $pk_lifestyle   = $_POST['pk_lifestyle'];
 
-// 2. CEK DUPLIKASI (PENTING!)
+// CEK DUPLIKASI (PENTING!)
 // Cek apakah ada pekerjaan LAIN dengan nama & jurusan sama (Kecuali ID yang sedang diedit)
 $cek_query = "SELECT id_pekerjaan FROM profil_pekerjaan 
               WHERE nama_pekerjaan = ? 
               AND id_jurusan = ? 
-              AND id_pekerjaan != ?"; // Pastikan tidak mengecek dirinya sendiri
+              AND id_pekerjaan != ?"; // tidak mengecek dirinya sendiri
 
 $stmt_cek = mysqli_prepare($koneksi, $cek_query);
 mysqli_stmt_bind_param($stmt_cek, "sii", $nama_pekerjaan, $id_jurusan, $id);
@@ -44,7 +44,7 @@ if (mysqli_stmt_num_rows($stmt_cek) > 0) {
 mysqli_stmt_close($stmt_cek);
 
 
-// 3. PROSES UPDATE
+// PROSES UPDATE
 // Ubah kolom jurusan_pekerjaan jadi id_jurusan
 $query = "UPDATE profil_pekerjaan SET
     nama_pekerjaan = ?,
@@ -65,13 +65,6 @@ $stmt = mysqli_prepare($koneksi, $query);
 if (!$stmt) {
     die("Query Error: " . mysqli_error($koneksi));
 }
-
-// Bind Param:
-// "s" (string) untuk nama
-// "i" (int) untuk id_jurusan
-// 8 "i" untuk skor
-// 1 "i" terakhir untuk WHERE id_pekerjaan
-// Total: "siiiiiiiiii" (1 s, 10 i)
 
 mysqli_stmt_bind_param(
     $stmt,

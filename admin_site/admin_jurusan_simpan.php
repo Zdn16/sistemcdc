@@ -3,7 +3,7 @@ session_start();
 include "koneksi.php";
 
 // ===========================
-// 1. AMBIL DATA DARI FORM
+// AMBIL DATA DARI FORM
 // ===========================
 $id_fakultas  = $_POST['id_fakultas'] ?? null;      // dari <select>
 $nama_jurusan = $_POST['nama_jurusan'] ?? null;     // dari input jurusan
@@ -13,7 +13,7 @@ $id_fakultas  = (int)$id_fakultas;
 $nama_jurusan = trim($nama_jurusan ?? "");
 
 // ===========================
-// 2. VALIDASI DATA KOSONG
+// VALIDASI DATA KOSONG
 // ===========================
 if ($id_fakultas <= 0 || $nama_jurusan === "") {
     echo "<script>alert('Data tidak lengkap!'); window.history.back();</script>";
@@ -21,10 +21,8 @@ if ($id_fakultas <= 0 || $nama_jurusan === "") {
 }
 
 // ===========================
-// [BARU] 2.5. CEK DUPLIKASI
+// CEK DUPLIKASI
 // ===========================
-// Cek: Apakah Nama Jurusan INI sudah ada di Fakultas INI?
-// Kita escape string dulu biar aman untuk query cek manual
 $nama_jurusan_esc = mysqli_real_escape_string($koneksi, $nama_jurusan);
 
 $cek_duplikat = mysqli_query($koneksi, "
@@ -36,15 +34,13 @@ $cek_duplikat = mysqli_query($koneksi, "
 
 if (mysqli_num_rows($cek_duplikat) > 0) {
     // Jika sudah ada, kembalikan ke form dengan pesan error
-    // Pastikan 'admin_jurusan.php' sesuai nama file form Anda
     header("Location: admin_jurusan_tambah.php?error=duplicate");
     exit;
 }
 
 // ===========================
-// 3. VALIDASI FAKULTAS EXIST
+// VALIDASI FAKULTAS EXIST
 // ===========================
-// Pastikan id_fakultas memang ada di tabel fakultas
 $cek = mysqli_prepare($koneksi, "SELECT 1 FROM fakultas WHERE id_fakultas=?");
 mysqli_stmt_bind_param($cek, "i", $id_fakultas);
 mysqli_stmt_execute($cek);
@@ -56,7 +52,7 @@ if (mysqli_stmt_num_rows($cek) == 0) {
 mysqli_stmt_close($cek);
 
 // ===========================
-// 4. SIMPAN KE TABEL JURUSAN
+// SIMPAN KE TABEL JURUSAN
 // ===========================
 $query = "INSERT INTO jurusan (id_fakultas, nama_jurusan) VALUES (?, ?)";
 $stmt  = mysqli_prepare($koneksi, $query);
@@ -70,7 +66,7 @@ mysqli_stmt_bind_param($stmt, "is", $id_fakultas, $nama_jurusan);
 $execute = mysqli_stmt_execute($stmt);
 
 // ===========================
-// 5. HASIL & REDIRECT
+// HASIL & REDIRECT
 // ===========================
 if ($execute) {
     mysqli_stmt_close($stmt);

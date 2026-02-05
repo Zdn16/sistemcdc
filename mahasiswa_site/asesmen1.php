@@ -2,7 +2,7 @@
 session_start();
 include "koneksi.php";
 
-// ambil semua fakultas
+// Mengambil semua fakultas
 $fakultasResult = mysqli_query($koneksi, "SELECT id_fakultas, nama_fakultas FROM fakultas ORDER BY nama_fakultas ASC");
 if(!$fakultasResult){
   die("Gagal ambil fakultas: " . mysqli_error($koneksi));

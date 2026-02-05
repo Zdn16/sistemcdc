@@ -34,8 +34,6 @@ include "navbar.php";
                     <select name="filter" class="form-select">
                         <option value="">Semua Data</option>
                         <option value="az" <?= ($_GET['filter'] ?? '')=='az' ? 'selected' : '' ?>>Nama A–Z</option>
-                        <option value="jadwal_kosong" <?= ($_GET['filter'] ?? '')=='jadwal_kosong' ? 'selected' : '' ?>>Jadwal Kosong</option>
-                        <option value="baru" <?= ($_GET['filter'] ?? '')=='baru' ? 'selected' : '' ?>>Data Terbaru</option>
                         <option value="menunggu" <?= ($_GET['filter'] ?? '')=='menunggu' ? 'selected' : '' ?>>Status Menunggu</option>
                         <option value="disetujui" <?= ($_GET['filter'] ?? '')=='disetujui' ? 'selected' : '' ?>>Status Disetujui</option>
                         <option value="selesai" <?= ($_GET['filter'] ?? '')=='selesai' ? 'selected' : '' ?>>Status Selesai</option>
@@ -70,9 +68,9 @@ $keyword = isset($_GET['keyword']) ? mysqli_real_escape_string($koneksi, $_GET['
 if (isset($_GET['filter']) && $_GET['filter'] != '') {
     $filter = $_GET['filter'];
 } 
-// Jika tidak ada filter, cek apakah ada input 'status' (dari dashboard)
+// Jika tidak ada filter, cek apakah ada input 'status' 
 elseif (isset($_GET['status']) && $_GET['status'] != '') {
-    // Ubah jadi huruf kecil semua biar cocok sama switch case (Selesai -> selesai)
+    // Ubah jadi huruf kecil 
     $filter = strtolower($_GET['status']); 
 } 
 // Default kosong

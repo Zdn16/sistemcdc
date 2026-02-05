@@ -211,7 +211,7 @@ function badgeStatus($status) {
                                     <?= nl2br(htmlspecialchars($data['permasalahan'] ?? '-')) ?>
                                 </div>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    Kategori Permasalahan (AI Prediction)
+                                    Kategori Permasalahan 
                                     <span class="badge bg-info text-dark"><?= htmlspecialchars($data['kategori_permasalahan'] ?? '-') ?></span>
                                 </li>
                             </ul>

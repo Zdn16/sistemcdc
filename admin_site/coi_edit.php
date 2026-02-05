@@ -2,20 +2,20 @@
 include "koneksi.php";
 include "navbar.php";
 
-// 1. Cek apakah ada ID di URL
+// Cek apakah ada ID di URL
 if (!isset($_GET['id'])) {
     header("Location: coi.php");
     exit;
 }
 
-// 2. Ambil ID dan sanitasi
+// Ambil ID dan sanitasi
 $id_item = mysqli_real_escape_string($koneksi, $_GET['id']);
 
-// 3. Query data lama
+// Query data lama
 $query = "SELECT * FROM item_pertanyaan WHERE id_item = '$id_item'";
 $result = mysqli_query($koneksi, $query);
 
-// 4. Cek apakah data ditemukan
+// Cek apakah data ditemukan
 if (mysqli_num_rows($result) == 0) {
     echo "<script>alert('Data tidak ditemukan!'); window.location='coi.php';</script>";
     exit;

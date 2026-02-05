@@ -8,9 +8,7 @@ session_set_cookie_params(3600);
 
 session_start();
 
-// ===============================
 // CEK AKTIVITAS SESSION
-// ===============================
 if (!isset($_SESSION['LAST_ACTIVITY'])) {
     $_SESSION['LAST_ACTIVITY'] = time();
 } elseif (time() - $_SESSION['LAST_ACTIVITY'] > 3600) {
@@ -24,9 +22,7 @@ $_SESSION['LAST_ACTIVITY'] = time();
 include "koneksi.php";
 include "profile_matching.php";
 
-// ==========================================
 // LOAD PHPMAILER
-// ==========================================
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -35,9 +31,7 @@ require 'PHPMailer/Exception.php';
 require 'PHPMailer/PHPMailer.php';
 require 'PHPMailer/SMTP.php';
 
-/* ==============================================
-   FUNGSI UNTUK MENGHUBUNGI FLASK (AI)
-   ============================================== */
+// FUNGSI UNTUK MENGHUBUNGI FLASK
 function cek_kategori_ke_flask($teks_masalah) {
     $url = 'http://127.0.0.1:5000/predict';
     $data = array('masalah' => $teks_masalah);
@@ -60,9 +54,7 @@ function cek_kategori_ke_flask($teks_masalah) {
     return $response_data['kategori'];
 }
 
-/* =========================
-   VALIDASI WAJIB
-========================= */
+// VALIDASI WAJIB
 $missing = [];
 if (!isset($_SESSION['nim'])) $missing[] = 'Session NIM';
 if (!isset($_SESSION['nama'])) $missing[] = 'Session Nama';
@@ -82,16 +74,14 @@ if (!empty($missing)) {
     die();
 }
 
-/* =========================
-   AMBIL DATA SESSION & SANITASI
-========================= */
+// AMBIL DATA SESSION 
 $nim          = mysqli_real_escape_string($koneksi, $_SESSION['nim']);
 $nama         = mysqli_real_escape_string($koneksi, $_SESSION['nama']);
 $jk           = mysqli_real_escape_string($koneksi, $_SESSION['jk']);
 $tgl_lahir    = mysqli_real_escape_string($koneksi, $_SESSION['tanggal_lahir']);
 $no_hp        = mysqli_real_escape_string($koneksi, $_SESSION['no_hp']);
 $email        = mysqli_real_escape_string($koneksi, $_SESSION['email']);
-$id_fakultas  = (int)$_SESSION['id_fakultas']; // Kalau angka pakai (int) aman
+$id_fakultas  = (int)$_SESSION['id_fakultas']; 
 $id_jurusan   = (int)$_SESSION['id_jurusan'];
 $angkatan     = mysqli_real_escape_string($koneksi, $_SESSION['angkatan']);
 $permasalahan = mysqli_real_escape_string($koneksi, $_SESSION['permasalahan']);
@@ -99,7 +89,7 @@ $permasalahan = mysqli_real_escape_string($koneksi, $_SESSION['permasalahan']);
 date_default_timezone_set('Asia/Jakarta');
 $tanggal = date("Y-m-d H:i:s");
 
-// Ambil nama fakultas & jurusan dari DB
+// Ambil nama fakultas & jurusan
 $stmt = mysqli_prepare($koneksi, "
     SELECT f.nama_fakultas, j.nama_jurusan
     FROM fakultas f
@@ -119,9 +109,8 @@ if (!$row) {
 $fakultas = $row['nama_fakultas'];
 $jurusan  = $row['nama_jurusan'];
 
-/* ========================================================
-   PANGGIL AI SEBELUM MASUK DATABASE
-   ======================================================== */
+// PANGGIL ML SEBELUM MASUK DATABASE
+
 $kategori_hasil_prediksi = "Manual Check"; 
 try {
     $kategori_hasil_prediksi = cek_kategori_ke_flask($permasalahan);
@@ -129,9 +118,7 @@ try {
     $kategori_hasil_prediksi = "Error Koneksi AI";
 }
 
-/* =========================
-   TRANSAKSI DB
-========================= */
+// TRANSAKSI DB
 mysqli_begin_transaction($koneksi);
 
 try {
@@ -140,7 +127,7 @@ try {
         throw new Exception("Session habis, silakan isi ulang asesmen");
     }
 
-    /* 1️⃣ INSERT ATAU UPDATE MAHASISWA */
+    /* INSERT ATAU UPDATE MAHASISWA */
     $cek_mhs = mysqli_query($koneksi, "SELECT nim FROM mahasiswa WHERE nim = '$nim'");
 
     if (mysqli_num_rows($cek_mhs) > 0) {
@@ -172,7 +159,7 @@ try {
         if (!$insert) throw new Exception("Gagal simpan mahasiswa: " . mysqli_error($koneksi));
     }
 
-    /* 2️⃣ INSERT ASESMEN */
+    /* INSERT ASESMEN */
     $result = mysqli_query($koneksi, "
         INSERT INTO asesmen (nim, tanggal_asesmen, permasalahan, kategori_permasalahan)
         VALUES ('$nim', '$tanggal', '$permasalahan', '$kategori_hasil_prediksi')
@@ -183,7 +170,7 @@ try {
     $id_asesmen = mysqli_insert_id($koneksi);
     if ($id_asesmen <= 0) throw new Exception("ID asesmen tidak terbentuk");
 
-    /* 3️⃣ INSERT JAWABAN */
+    /* INSERT JAWABAN */
      $total_per_kategori = [
         'autonomy'    => 0,
         'security'    => 0,
@@ -225,10 +212,6 @@ try {
         WHERE id_asesmen = $id_asesmen
     ");
 
-    /* ========================================================
-       TENTUKAN HASIL ASESMEN & SIMPAN KE TABEL BARU
-       ======================================================== */
-
     // Simpan Hasil COI Dominan ke Tabel Asesmen
     $hasil_asesmen = array_keys($total_per_kategori, max($total_per_kategori))[0];
     
@@ -253,7 +236,7 @@ $skor_mahasiswa = [
     // Gunakan $id_jurusan (yang diambil dari session di atas), JANGAN gunakan $jurusan (string nama)
     $rekomendasi = hitungSPKProfileMatching($koneksi, $id_jurusan, $skor_mahasiswa);
     
-    // C. Simpan ke Tabel `hasil_rekomendasi` (Maksimal Top 3)
+    // Simpan ke Tabel `hasil_rekomendasi` (Maksimal Top 3)
     $urutan = 1;
     foreach ($rekomendasi as $data_job) {
         if ($urutan > 3) break; 
@@ -378,9 +361,7 @@ try {
     $mail->isHTML(true);
     $mail->Subject = 'Hasil Asesmen Karier - CDC Unand';
     
-   // ===============================
 // Helper (ANTI REDECLARE)
-// ===============================
 if (!function_exists('renderCOIBarChartEmail')) {
     function renderCOIBarChartEmail($scores) {
         $min = 5;  $max = 30;  $range = $max - $min;
@@ -495,9 +476,7 @@ if (!function_exists('renderTopJobsEmail')) {
     }
 }
 
-// ===============================
-// Data COI untuk grafik (ambil dari hasil perhitungan)
-// ===============================
+// Data COI untuk grafik 
 $coiScores = [
     "Autonomy/Independence"      => $total_per_kategori['autonomy'],
     "Security/Stability"         => $total_per_kategori['security'],
@@ -511,9 +490,7 @@ $coiScores = [
 
 $chartCOIHtml = renderCOIBarChartEmail($coiScores);
 
-// ===============================
 // Ambil Top 3 rekomendasi dari DB + ket_pekerjaan
-// ===============================
 $topJobs = [];
 $qTop = mysqli_query($koneksi, "
     SELECT p.nama_pekerjaan, p.ket_pekerjaan, hr.hasil_skor
@@ -529,9 +506,7 @@ while ($r = mysqli_fetch_assoc($qTop)) {
 $topJobsHtml = renderTopJobsEmail($topJobs);
 $anchorExplanationHtml = renderAnchorExplanation();
 
-// ===============================
-// ISI EMAIL (PAKAI $chartCOIHtml & $topJobsHtml)
-// ===============================
+// ISI EMAIL
 $mail->Body = "
 <div style='font-family: Arial, Helvetica, sans-serif; color:#2c3e50; line-height:1.5; max-width:700px;'>
   
@@ -593,9 +568,7 @@ $mail->Body = "
     exit;
 }
 
-// ===============================
 // CLEAR SESSION (WAJIB)
-// ===============================
 unset($_SESSION['nim']);
 unset($_SESSION['permasalahan']);
 unset($_SESSION['jawaban']);   // kalau ada

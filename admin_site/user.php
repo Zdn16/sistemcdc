@@ -5,12 +5,11 @@ include "navbar.php";
 $keyword = "";
 if (isset($_GET['cari'])) {
     $keyword = $_GET['keyword'];
-    // Saya tambahkan pencarian berdasarkan status juga
     $query = "SELECT * FROM user 
-              WHERE id_user LIKE '%$keyword%' 
-              OR nama_user LIKE '%$keyword%'";
+              WHERE (id_user LIKE '%$keyword%' OR nama_user LIKE '%$keyword%') 
+              AND role != 'admin'";
 } else {
-    $query = "SELECT * FROM user";
+    $query = "SELECT * FROM user WHERE role != 'admin'";
 }
 
 $result = mysqli_query($koneksi, $query);
@@ -52,7 +51,6 @@ $no = 1;
                 <table class="table table-bordered table-striped">
                   <tr>
                       <th>No</th>
-                      <th>ID Pengguna</th>
                       <th>Nama</th>
                       <th>Jenis Kelamin</th>
                       <th>Email</th>
@@ -65,7 +63,6 @@ $no = 1;
                       <?php while ($row = mysqli_fetch_assoc($result)): ?>
                       <tr>
                           <td><?= $no++; ?></td>
-                          <td><?= $row['id_user']; ?></td>
                           <td><?= $row['nama_user']; ?></td>
                           <td><?= $row['jk_user']; ?></td>
                           <td><?= $row['email_user']; ?></td>

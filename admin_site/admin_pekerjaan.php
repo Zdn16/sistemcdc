@@ -8,27 +8,21 @@ $keyword = isset($_GET['keyword'])
             ? mysqli_real_escape_string($koneksi, $_GET['keyword']) 
             : "";
 
-// =======================
-// QUERY DASAR (UBAH DISINI: Tambahkan JOIN)
-// =======================
-// Kita ambil data profil_pekerjaan (p) dan nama_jurusan (j)
+
+// mengambil profil_pekerjaan (p) dan nama_jurusan (j)
 $query = "SELECT p.*, j.nama_jurusan 
           FROM profil_pekerjaan p
           LEFT JOIN jurusan j ON p.id_jurusan = j.id_jurusan
           WHERE 1=1";
 
-// =======================
-// SEARCH KEYWORD (UBAH DISINI)
-// =======================
 if (!empty($keyword)) {
     // Cari berdasarkan nama pekerjaan ATAU nama jurusan (dari tabel j)
     $query .= " AND (p.nama_pekerjaan LIKE '%$keyword%' 
                      OR j.nama_jurusan LIKE '%$keyword%')";
 }
 
-// =======================
+
 // SORT DEFAULT
-// =======================
 $query .= " ORDER BY p.id_pekerjaan ASC";
 
 $result = mysqli_query($koneksi, $query);
