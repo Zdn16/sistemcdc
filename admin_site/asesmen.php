@@ -77,7 +77,7 @@ elseif (isset($_GET['status']) && $_GET['status'] != '') {
 } 
 // Default kosong
 else {
-    $filter = '';
+    $filter = 'baru';
 }
 
 $sql = "
@@ -132,7 +132,7 @@ switch ($filter) {
         break;
 
     default:
-        $sql .= " ORDER BY a.tanggal_asesmen ASC"; 
+        $sql .= " ORDER BY a.tanggal_asesmen DESC"; 
 }
 
 $result = mysqli_query($koneksi, $sql);
@@ -147,13 +147,11 @@ if(mysqli_num_rows($result) > 0){
     $no = 1;
     while($row = mysqli_fetch_assoc($result)){
 
-        // --- MULAI PERBAIKAN LOGIKA TAMPILAN JADWAL ---
         $jadwalRaw = $row['jadwal_konseling'];
         
         // Cek apakah jadwal ada dan tidak kosong/nol
         if (!empty($jadwalRaw) && $jadwalRaw != '0000-00-00 00:00:00') {
             // Ubah format jadi: 13-01-2026 14:30 WIB
-            // Anda bisa mengganti format 'd-m-Y H:i' sesuai selera (misal 'd M Y, H:i')
             $jamDisplay = date('d-m-Y H:i', strtotime($jadwalRaw)) . ' WIB';
         } else {
             $jamDisplay = '<span>-</span>';
