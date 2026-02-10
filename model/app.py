@@ -22,7 +22,7 @@ def init_db():
 # Jalankan fungsi pembuatan database saat aplikasi mulai
 init_db()
 
-# --- 2. LOAD MODEL ---
+# --- LOAD MODEL ---
 print("Sedang memuat model... Mohon tunggu sebentar.")
 
 # Load Model Logistic Regression 
@@ -75,6 +75,6 @@ def predict():
     except Exception as e:
         return jsonify({'status': 'error', 'pesan': str(e)})
 
-# --- 4. JALANKAN APLIKASI ---
+# --- JALANKAN APLIKASI ---
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

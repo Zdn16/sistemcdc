@@ -1,0 +1,50 @@
+body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Wrapper background */
+    .bg-blur {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Background image blur */
+    .bg-blur::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: url("../foto/unandbaru.jpg");
+      background-size: cover;
+      background-position: center;
+      filter: blur(6px);
+      transform: scale(1.1);
+      z-index: -2;
+    }
+
+    /* Overlay gelap */
+    .bg-blur::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: -1;
+    }
+
+.form {
+  position: relative;
+  z-index: 2;
+}
+
+.form form {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  width: 28rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  text-align: center;
+}
