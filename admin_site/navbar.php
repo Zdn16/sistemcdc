@@ -21,6 +21,9 @@
       <a class="nav-link text-white" href="user.php">Daftar Konselor</a>
     </li>
     <li class="nav-item">
+      <a class="nav-link text-white" href="admin_mahasiswa.php">Daftar Mahasiswa</a>
+    </li>
+    <li class="nav-item">
       <a class="nav-link text-white" href="coi.php">Career Anchor</a>
     </li>
     <li class="nav-item">

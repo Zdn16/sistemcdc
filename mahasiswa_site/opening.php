@@ -20,9 +20,14 @@
       <p class="text-light mt-3">
         Untuk Mahasiswa dan Alumni <br> Universitas Andalas
       </p>
-      <a href="asesmen1.php" class="btn btn-primary btn-lg mt-4 px-5">
-        Masuk
-      </a>
+        <div class="d-flex justify-content-center gap-3">
+          <a href="login_mahasiswa.php" class="btn btn-primary btn-lg mt-4 px-5">
+            Masuk
+          </a>
+          <a href="register_mahasiswa.php" class="btn btn-primary btn-lg mt-4 px-5">
+            Buat Akun
+          </a>
+        </div>
     </div>
   </div>
 

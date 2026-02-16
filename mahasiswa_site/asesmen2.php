@@ -53,7 +53,7 @@ unset($_SESSION['error_permasalahan'], $_SESSION['old_permasalahan']);
 
               <!-- Tombol -->
               <div class="d-flex justify-content-between mt-4">
-                <a href="asesmen1.php" class="btn btn-secondary">Kembali</a>
+                <a href="home_mahasiswa.php" class="btn btn-secondary">Kembali</a>
                 <button type="submit" class="btn btn-primary">Lanjut</button>
               </div>
 

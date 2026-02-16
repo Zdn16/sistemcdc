@@ -5,13 +5,13 @@ include "koneksi.php";
 $id = $_POST['id_pekerjaan'] ?? null;
 
 if (!$id) {
-    die("ID tidak valid");
+    die("ID Pekerjaan tidak valid.");
 }
 
-// Tangkap Data
+// Tangkap Data dari Form
 $nama_pekerjaan = $_POST['nama_pekerjaan'];
-$id_jurusan     = $_POST['id_jurusan']; // Ganti dari jurusan_pekerjaan ke id_jurusan
 $ket_pekerjaan  = $_POST['ket_pekerjaan'];
+$id_jurusan     = $_POST['id_jurusan'];
 $pk_autonomy    = $_POST['pk_autonomy'];
 $pk_security    = $_POST['pk_security'];
 $pk_tf          = $_POST['pk_tf'];
@@ -21,12 +21,13 @@ $pk_service     = $_POST['pk_service'];
 $pk_challenge   = $_POST['pk_challenge'];
 $pk_lifestyle   = $_POST['pk_lifestyle'];
 
-// CEK DUPLIKASI (PENTING!)
-// Cek apakah ada pekerjaan LAIN dengan nama & jurusan sama (Kecuali ID yang sedang diedit)
+// ==========================================
+// CEK DUPLIKASI (KECUALI DIRI SENDIRI)
+// ==========================================
 $cek_query = "SELECT id_pekerjaan FROM profil_pekerjaan 
               WHERE nama_pekerjaan = ? 
               AND id_jurusan = ? 
-              AND id_pekerjaan != ?"; // tidak mengecek dirinya sendiri
+              AND id_pekerjaan != ?"; // Pastikan tidak mengecek data yang sedang diedit
 
 $stmt_cek = mysqli_prepare($koneksi, $cek_query);
 mysqli_stmt_bind_param($stmt_cek, "sii", $nama_pekerjaan, $id_jurusan, $id);
@@ -44,11 +45,12 @@ if (mysqli_stmt_num_rows($stmt_cek) > 0) {
 mysqli_stmt_close($stmt_cek);
 
 
-// PROSES UPDATE
-// Ubah kolom jurusan_pekerjaan jadi id_jurusan
+// ==========================================
+// PROSES UPDATE DATA
+// ==========================================
 $query = "UPDATE profil_pekerjaan SET
     nama_pekerjaan = ?,
-    ket_pekerjaan =?,
+    ket_pekerjaan = ?,
     id_jurusan = ?, 
     pk_autonomy = ?,
     pk_security = ?,
@@ -65,6 +67,12 @@ $stmt = mysqli_prepare($koneksi, $query);
 if (!$stmt) {
     die("Query Error: " . mysqli_error($koneksi));
 }
+
+// Parameter: 
+// s (nama), s (ket), i (id_jur), 
+// i (auto), i (sec), i (tf), i (gm), i (ec), i (serv), i (chal), i (life), 
+// i (WHERE id)
+// Total: 2 string, 10 integer = "ssiiiiiiiiii"
 
 mysqli_stmt_bind_param(
     $stmt,

@@ -202,6 +202,26 @@ try {
 
     mysqli_commit($koneksi);
 
+    // ============================================================
+    // TAMBAHAN: PANGGIL PYTHON (APP2.PY)
+    // ============================================================
+    $url_python = "http://127.0.0.1:5001/api/rekomendasi-final/" . $id_asesmen;
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url_python);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10); // Tunggu maks 10 detik
+    
+    $response_python = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    // Opsional: Cek error jika perlu (bisa dihapus nanti)
+    if ($http_code != 200) {
+        // Jangan die(), biarkan lanjut email tapi catat error jika ada log
+        // error_log("Gagal memanggil Python: " . $response_python);
+    }
+
 } catch (Exception $e) {
     mysqli_rollback($koneksi);
     echo "<h3>Error Database:</h3>" . $e->getMessage();
@@ -247,13 +267,16 @@ try {
     $mail->Subject = 'Hasil Asesmen Karier - CDC Unand';
 
     // AMBIL DATA REKOMENDASI UNTUK EMAIL
+// AMBIL DATA REKOMENDASI UNTUK EMAIL
     $topJobs = [];
     $qTop = mysqli_query($koneksi, "
-        SELECT p.nama_pekerjaan, p.ket_pekerjaan, hr.hasil_skor
+        SELECT p.nama_pekerjaan, p.ket_pekerjaan, 
+               hr.hasil_skor, hr.hasil_skor_baru, hr.urutan_baru
         FROM hasil_rekomendasi hr
         JOIN profil_pekerjaan p ON p.id_pekerjaan = hr.id_pekerjaan
         WHERE hr.id_asesmen = '$id_asesmen'
-        ORDER BY hr.urutan_rekomendasi ASC
+        ORDER BY 
+            CASE WHEN hr.urutan_baru > 0 THEN hr.urutan_baru ELSE hr.urutan_rekomendasi END ASC
         LIMIT 3
     ");
     while ($r = mysqli_fetch_assoc($qTop)) { $topJobs[] = $r; }

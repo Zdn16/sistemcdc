@@ -19,6 +19,7 @@ if (isset($_POST['simpan'])) {
     $no_hp          = mysqli_real_escape_string($koneksi, $_POST['no_hp']);
     $jenis_kelamin  = mysqli_real_escape_string($koneksi, $_POST['jenis_kelamin']);
     $angkatan       = mysqli_real_escape_string($koneksi, $_POST['angkatan']);
+    $status_mahasiswa = mysqli_real_escape_string($koneksi, $_POST['status_mahasiswa']);
     $id_jurusan     = mysqli_real_escape_string($koneksi, $_POST['id_jurusan']);
 
     // --- PROSES UPLOAD FOTO ---
@@ -73,6 +74,7 @@ if (isset($_POST['simpan'])) {
                        no_hp = '$no_hp', 
                        jenis_kelamin = '$jenis_kelamin',
                        angkatan = '$angkatan',
+                       status_mahasiswa = '$status_mahasiswa',
                        id_jurusan = '$id_jurusan' 
                        $foto_db 
                        WHERE nim = '$nim'";
@@ -104,6 +106,7 @@ $query_jurusan = mysqli_query($koneksi, "SELECT * FROM jurusan ORDER BY nama_jur
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Edit Profil - CDC Mahasiswa</title>
+    <link rel="icon" type="image/png" href="../foto/favicon.ico">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -201,10 +204,20 @@ $query_jurusan = mysqli_query($koneksi, "SELECT * FROM jurusan ORDER BY nama_jur
                             </div>
                         </div>
 
-                        <div class="mb-4">
-                            <label class="form-label fw-bold">Jurusan</label>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Status Mahasiswa</label>
+                                <select name="status_mahasiswa" class="form-select" required>
+                                    <option value="">-- Pilih Status --</option>
+                                    <option value="Aktif" <?php if(($mhs['status_mahasiswa'] ?? '') == 'Aktif') echo 'selected'; ?>>Aktif</option>
+                                    <option value="Alumni" <?php if(($mhs['status_mahasiswa'] ?? '') == 'Alumni') echo 'selected'; ?>>Alumni</option>
+                                </select>
+                            </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Departemen</label>
                             <select name="id_jurusan" class="form-select" required>
-                                <option value="">-- Pilih Jurusan --</option>
+                                <option value="">-- Pilih Departemen --</option>
                                 <?php while ($row_jur = mysqli_fetch_assoc($query_jurusan)): ?>
                                     <option value="<?php echo $row_jur['id_jurusan']; ?>" 
                                         <?php if($mhs['id_jurusan'] == $row_jur['id_jurusan']) echo 'selected'; ?>>

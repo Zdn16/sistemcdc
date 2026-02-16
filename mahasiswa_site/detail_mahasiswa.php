@@ -46,7 +46,7 @@ $query_rek = "SELECT hr.*, pp.nama_pekerjaan
               FROM hasil_rekomendasi hr
               LEFT JOIN profil_pekerjaan pp ON hr.id_pekerjaan = pp.id_pekerjaan
               WHERE hr.id_asesmen = $id_asesmen
-              ORDER BY hr.urutan_rekomendasi ASC";
+              ORDER BY hr.urutan_baru ASC";
 
 $res_rek = mysqli_query($koneksi, $query_rek);
 $rekomendasi = [];
@@ -233,7 +233,7 @@ function badgeStatus($status) {
                                                             <td><?= htmlspecialchars($rek['nama_pekerjaan'] ?? 'Nama Pekerjaan Terhapus') ?></td>
                                                             <td class="text-center">
                                                                 <span class="badge bg-success">
-                                                                    <?= number_format((float)($rek['hasil_skor'] ?? 0), 2) ?>
+                                                                    <?= number_format((float)($rek['hasil_skor_baru'] ?? 0), 2) ?>
                                                                 </span>
                                                             </td>
                                                         </tr>

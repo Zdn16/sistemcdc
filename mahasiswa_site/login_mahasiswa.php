@@ -62,6 +62,9 @@ if (isset($_GET['reset']) && $_GET['reset'] === 'success') {
             <div class="mt-3 text-center">
                 <a href="resetpassword_mahasiswa.php" class="text-decoration-none">Lupa Password?</a>
             </div>
+            <div class="mt-3 text-center">
+                <a href="register_mahasiswa.php" class="text-decoration-none">Belum punya akun? Daftar</a>
+            </div>
         </form>
     </div>
 </div>

@@ -44,7 +44,7 @@ $query_rek = "SELECT hr.*, pp.nama_pekerjaan
               FROM hasil_rekomendasi hr
               LEFT JOIN profil_pekerjaan pp ON hr.id_pekerjaan = pp.id_pekerjaan
               WHERE hr.id_asesmen = '$id_asesmen'
-              ORDER BY hr.urutan_rekomendasi ASC";
+              ORDER BY hr.urutan_baru ASC";
 
 $res_rek = mysqli_query($koneksi, $query_rek);
 $rekomendasi = [];
@@ -258,7 +258,7 @@ if ($q_konseling) {
                                                             </td>
                                                             <td class="text-center">
                                                                 <span class="badge bg-success">
-                                                                    <?= number_format($rek['hasil_skor'], 2) ?>
+                                                                    <?= number_format($rek['hasil_skor_baru'], 2) ?>
                                                                 </span>
                                                             </td>
                                                         </tr>
